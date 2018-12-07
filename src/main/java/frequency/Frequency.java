@@ -1,12 +1,4 @@
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
+package frequency;
 
 import static java.util.Objects.hash;
 
@@ -38,7 +30,7 @@ public class Frequency {
 
     @Override
     public String toString() {
-        return "Frequency : " + value;
+        return "frequency.Frequency : " + value;
     }
 
     public void remove(Frequency... frequencies) {
