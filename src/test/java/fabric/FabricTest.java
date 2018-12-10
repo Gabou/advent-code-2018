@@ -1,6 +1,5 @@
 package fabric;
 
-import fabric.Fabric;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +12,8 @@ public class FabricTest {
 
     @Test
     void should_give_4_conflict_squares_with_dataSet() {
-        Assertions.assertThat(Fabric.conflictSquaresCount(dataSet)).isEqualTo(4);
+        Fabric fabric= new Fabric(dataSet);
+        Assertions.assertThat(fabric.conflictSquaresCount()).isEqualTo(4);
     }
-
-
-
 
 }
