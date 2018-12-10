@@ -1,6 +1,7 @@
 package Inventory;
 
 import frequency.Frequency;
+import reader.InputReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Inventory {
     public static void main(String[] args) {
         Inventory inventory = new Inventory();
         try {
-            List<String> iDs = input("/inputDay2");
+            List<String> iDs = InputReader.input("/inputDay2");
             System.out.println(inventory.checksum(iDs));
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,22 +49,6 @@ public class Inventory {
         }
 
         return idsWithThreeSameLetters * idsWithTwoSameLetters;
-    }
-
-    private static List<String> input(String fileName) throws IOException {
-
-        List<String> frequencies = new ArrayList<>();
-
-        InputStream is = Frequency.class.getResourceAsStream(fileName);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-        String line;
-
-        while ((line = reader.readLine()) != null){
-            frequencies.add(line);
-        }
-
-        return  frequencies;
     }
 
 }

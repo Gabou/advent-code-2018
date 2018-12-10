@@ -1,6 +1,7 @@
 package fabric;
 
 import frequency.Frequency;
+import reader.InputReader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,7 +65,7 @@ public class Fabric {
     }
 
     public static void main(String[] args) throws IOException {
-        List<String> input = input("/inputDay3");
+        List<String> input =  InputReader.input("/inputDay3");
 
         Fabric fabric = new Fabric(input);
 
@@ -95,21 +96,5 @@ public class Fabric {
         }
 
         return new ID(-1);
-    }
-
-    private static List<String> input(String fileName) throws IOException {
-
-        List<String> lines = new ArrayList<>();
-
-        InputStream is = Frequency.class.getResourceAsStream(fileName);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-        String line;
-
-        while ((line = reader.readLine()) != null){
-            lines.add(line);
-        }
-
-        return  lines;
     }
 }
