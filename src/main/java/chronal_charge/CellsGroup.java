@@ -14,10 +14,6 @@ public class CellsGroup {
         this.fuelLevel = fuelLevel;
     }
 
-    public boolean hasLargerFuelLevel(CellsGroup cellsGroup) {
-        return fuelLevel.isLargerThan(cellsGroup.fuelLevel);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -41,5 +37,21 @@ public class CellsGroup {
                 ", size=" + size +
                 ", fuelLevel=" + fuelLevel +
                 '}';
+    }
+
+    public boolean hasMoreFuelThan(CellsGroup cellsGroup) {
+        if (cellsGroup == null) {
+            return true;
+        }
+
+        return fuelLevel.isLargerThan(cellsGroup.fuelLevel);
+    }
+
+    protected FuelLevel fuelLevel() {
+        return fuelLevel;
+    }
+
+    protected Position position() {
+        return position;
     }
 }

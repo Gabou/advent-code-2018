@@ -17,13 +17,6 @@ public class FuelCell {
         return fuelLevel;
     }
 
-    boolean isInGroup(Position position, Size size) {
-        return this.position.x() >= position.x()
-                && this.position.x() < position.x() + size.width()
-            && this.position.y() >= position.y()
-                && this.position.y() < position.y() + size.height();
-    }
-
     @Override
     public String toString() {
         return "FuelCell{" + position + fuelLevel + '}';
