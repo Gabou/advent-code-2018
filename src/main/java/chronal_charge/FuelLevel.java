@@ -35,7 +35,7 @@ public class FuelLevel {
                 '}';
     }
 
-    public boolean isLargerThan(FuelLevel largestFuelLevel) {
-        return level > largestFuelLevel.level;
+    public boolean isLargerOrEqualThan(FuelLevel largestFuelLevel) {
+        return level >= largestFuelLevel.level;
     }
 }

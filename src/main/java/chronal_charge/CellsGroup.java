@@ -39,12 +39,12 @@ public class CellsGroup {
                 '}';
     }
 
-    public boolean hasMoreFuelThan(CellsGroup cellsGroup) {
+    public boolean hasMoreOrSameFuelThan(CellsGroup cellsGroup) {
         if (cellsGroup == null) {
             return true;
         }
 
-        return fuelLevel.isLargerThan(cellsGroup.fuelLevel);
+        return fuelLevel.isLargerOrEqualThan(cellsGroup.fuelLevel);
     }
 
     protected FuelLevel fuelLevel() {
