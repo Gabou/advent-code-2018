@@ -26,4 +26,11 @@ public class CellsGridTest {
         CellsGroup cellsGroup = cellsGrid.cellsGroupsWithLargestFuel();
         Assertions.assertThat(cellsGroup).isEqualTo(new CellsGroup(new Position(90,269), new Size(16), new FuelLevel(113)));
     }
+
+    @Test
+    void give_cells_group_with_largest_fuel_with_serial_number_42() {
+        CellsGrid cellsGrid = new CellsGrid(new Size(300), 42);
+        CellsGroup cellsGroup = cellsGrid.cellsGroupsWithLargestFuel();
+        Assertions.assertThat(cellsGroup).isEqualTo(new CellsGroup(new Position(232,251), new Size(12), new FuelLevel(119)));
+    }
 }

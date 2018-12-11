@@ -51,6 +51,8 @@ public class CellsGrid {
             CellsGroup cellsGroup = cellsGroupsWithLargestFuel(new Size(width));
             if(cellsGroup.hasMoreFuelThan(cellsGroupWithLargestFuel)) {
                 cellsGroupWithLargestFuel =cellsGroup;
+            } else {
+                return cellsGroupWithLargestFuel;
             }
         }
 
