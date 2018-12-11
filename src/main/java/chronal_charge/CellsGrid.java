@@ -35,7 +35,7 @@ public class CellsGrid {
             for (int y = 0; y < this.size.value() - size.value(); y++) {
                 Position position = new Position(x, y);
                 CellsGroup cellsGroup = cellsGroup(position, size);
-                if (cellsGroup.hasMoreFuelThan(cellsGroupWithLargestFuel)) {
+                if (cellsGroup.hasMoreOrSameFuelThan(cellsGroupWithLargestFuel)) {
                     cellsGroupWithLargestFuel = cellsGroup;
                 }
             }
@@ -49,7 +49,7 @@ public class CellsGrid {
         CellsGroup cellsGroupWithLargestFuel = null;
         for (int width = 0; width < size.value(); width++) {
             CellsGroup cellsGroup = cellsGroupsWithLargestFuel(new Size(width));
-            if(cellsGroup.hasMoreFuelThan(cellsGroupWithLargestFuel)) {
+            if(cellsGroup.hasMoreOrSameFuelThan(cellsGroupWithLargestFuel)) {
                 cellsGroupWithLargestFuel =cellsGroup;
             } else {
                 return cellsGroupWithLargestFuel;
@@ -60,7 +60,7 @@ public class CellsGrid {
     }
 
     public static void main(String[] args) {
-        CellsGrid cellsGrid = new CellsGrid(new Size(300), 9435);
+        CellsGrid cellsGrid = new CellsGrid(new Size(300), 18);
         System.out.println(cellsGrid.cellsGroupsWithLargestFuel(new Size(3)));
         System.out.println(cellsGrid.cellsGroupsWithLargestFuel());
     }
