@@ -19,4 +19,11 @@ public class CellsGridTest {
         Position originPosition = cellsGrid.cellsGroupsOriginCoordinateWithLargestFuel(new Size(3, 3));
         Assertions.assertThat(originPosition).isEqualTo(new Position(33,45));
     }
+
+    @Test
+    void give_cells_group_with_largest_fuel_with_serial_number_18() {
+        CellsGrid cellsGrid = new CellsGrid(new Size(300, 300), 18);
+        CellsGroup cellsGroup = cellsGrid.cellsGroupsWithLargestFuel();
+        Assertions.assertThat(cellsGroup).isEqualTo(new CellsGroup(new Position(90,269), new Size(16,16), new FuelLevel(113)));
+    }
 }
