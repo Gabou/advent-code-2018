@@ -65,6 +65,7 @@ public class Guards {
         int sleepTime = 0;
         LocalTime minuteWhenSleepingMost = LocalTime.of(0,0);
 
+        // Guard sleeping the more
         for (Map.Entry<Integer, Map<LocalTime, Integer>> integerMapEntry : frequencyOfSleepTimeByGard.entrySet()) {
 
             LocalTime minuteWhenSleepingMostForThisGuard = LocalTime.of(0,0);
@@ -88,6 +89,25 @@ public class Guards {
         int result = guardWithBiggestSleepTime * minuteWhenSleepingMost.getMinute();
 
         System.out.println(result);
+
+        //Guard sleeping the more frequently at wich minute
+        int guardId = 0;
+        int moreFrequenciesOfSleep = 0;
+        LocalTime minuteWhereSleepingTheMore = LocalTime.of(0,0);
+
+        for (Map.Entry<Integer, Map<LocalTime, Integer>> integerMapEntry : frequencyOfSleepTimeByGard.entrySet()) {
+
+            LocalTime minuteWhenSleepingMostForThisGuard = LocalTime.of(0,0);
+            for (Map.Entry<LocalTime, Integer> localTimeIntegerEntry : integerMapEntry.getValue().entrySet()) {
+                if (localTimeIntegerEntry.getValue() > moreFrequenciesOfSleep) {
+                    guardId = integerMapEntry.getKey();
+                    moreFrequenciesOfSleep = localTimeIntegerEntry.getValue();
+                    minuteWhereSleepingTheMore = localTimeIntegerEntry.getKey();
+                }
+            }
+        }
+
+        System.out.println("answer part 2 : " + guardId*minuteWhereSleepingTheMore.getMinute());
 
     }
 
