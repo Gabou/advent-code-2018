@@ -4,9 +4,7 @@ import reader.InputReader;
 
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +13,7 @@ import java.util.TreeSet;
 
 public class Guards {
 
-    public static void main(String[] args) throws IOException {
+    static GuardKataResult guardKata() throws IOException {
         List<String> input = InputReader.input("/inputDay4");
         SortedSet<String> objects = new TreeSet<>(input);
 
@@ -86,9 +84,7 @@ public class Guards {
             }
         }
 
-        int result = guardWithBiggestSleepTime * minuteWhenSleepingMost.getMinute();
-
-        System.out.println(result);
+        int result1 = guardWithBiggestSleepTime * minuteWhenSleepingMost.getMinute();
 
         //Guard sleeping the more frequently at wich minute
         int guardId = 0;
@@ -107,8 +103,25 @@ public class Guards {
             }
         }
 
-        System.out.println("answer part 2 : " + guardId*minuteWhereSleepingTheMore.getMinute());
+        int result2 = guardId * minuteWhereSleepingTheMore.getMinute();
 
+        return new GuardKataResult(result1, result2);
+    }
+
+    public static void main(String[] args) throws IOException {
+        GuardKataResult guardKataResult = guardKata();
+        System.out.println(guardKataResult.part1);
+        System.out.println("answer part 2 : " + guardKataResult.part2);
+    }
+
+    static class GuardKataResult {
+        final int part1;
+        final int part2;
+
+        GuardKataResult(int part1, int part2) {
+            this.part1 = part1;
+            this.part2 = part2;
+        }
     }
 
 }
