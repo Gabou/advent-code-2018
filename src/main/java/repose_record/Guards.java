@@ -5,13 +5,17 @@ import reader.InputReader;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.time.temporal.ChronoUnit.MINUTES;
+import static java.util.Comparator.comparing;
 
 public class Guards {
 
@@ -21,32 +25,10 @@ public class Guards {
 
         Map<Integer, List<String>> recordsByGuard = groupRecordByGuard(records);
 
-        Map<Integer, Map<LocalTime, Integer>> frequencyOfSleepTimeByGard = mapValues(recordsByGuard, Guards::parseSleepRecords);
+        Map<Integer, Map<LocalTime, Integer>> frequencyOfSleepTimeByGuard = mapValues(recordsByGuard, Guards::parseSleepRecords);
 
-        int guardWithBiggestSleepTime = 0;
-        int sleepTime = 0;
-        LocalTime minuteWhenSleepingMost = LocalTime.of(0, 0);
-
-        // Guard sleeping the more
-        for (Map.Entry<Integer, Map<LocalTime, Integer>> integerMapEntry : frequencyOfSleepTimeByGard.entrySet()) {
-
-            LocalTime minuteWhenSleepingMostForThisGuard = LocalTime.of(0, 0);
-            int sleepingTime = 0;
-            int moreFrequenciesOfSleep = 0;
-            for (Map.Entry<LocalTime, Integer> localTimeIntegerEntry : integerMapEntry.getValue().entrySet()) {
-                sleepingTime += localTimeIntegerEntry.getValue();
-                if (localTimeIntegerEntry.getValue() > moreFrequenciesOfSleep) {
-                    moreFrequenciesOfSleep = localTimeIntegerEntry.getValue();
-                    minuteWhenSleepingMostForThisGuard = localTimeIntegerEntry.getKey();
-                }
-            }
-
-            if (sleepingTime > sleepTime) {
-                guardWithBiggestSleepTime = integerMapEntry.getKey();
-                sleepTime = sleepingTime;
-                minuteWhenSleepingMost = minuteWhenSleepingMostForThisGuard;
-            }
-        }
+        int guardWithBiggestSleepTime = getGuardWithBiggestSleepTime(frequencyOfSleepTimeByGuard);
+        LocalTime minuteWhenSleepingMost = getMinuteSleptTheMost(frequencyOfSleepTimeByGuard.get(guardWithBiggestSleepTime));
 
         int result1 = guardWithBiggestSleepTime * minuteWhenSleepingMost.getMinute();
 
@@ -55,9 +37,8 @@ public class Guards {
         int moreFrequenciesOfSleep = 0;
         LocalTime minuteWhereSleepingTheMore = LocalTime.of(0, 0);
 
-        for (Map.Entry<Integer, Map<LocalTime, Integer>> integerMapEntry : frequencyOfSleepTimeByGard.entrySet()) {
+        for (Map.Entry<Integer, Map<LocalTime, Integer>> integerMapEntry : frequencyOfSleepTimeByGuard.entrySet()) {
 
-            LocalTime minuteWhenSleepingMostForThisGuard = LocalTime.of(0, 0);
             for (Map.Entry<LocalTime, Integer> localTimeIntegerEntry : integerMapEntry.getValue().entrySet()) {
                 if (localTimeIntegerEntry.getValue() > moreFrequenciesOfSleep) {
                     guardId = integerMapEntry.getKey();
@@ -70,6 +51,28 @@ public class Guards {
         int result2 = guardId * minuteWhereSleepingTheMore.getMinute();
 
         return new GuardKataResult(result1, result2);
+    }
+
+    private static int getGuardWithBiggestSleepTime(Map<Integer, Map<LocalTime, Integer>> frequencyOfSleepTimeByGuard) {
+        return frequencyOfSleepTimeByGuard.keySet().stream()
+                .max(comparing(guardId -> countTotalSleepTimeForGuard(frequencyOfSleepTimeByGuard.get(guardId))))
+                .orElse(0);
+    }
+
+    private static LocalTime getMinuteSleptTheMost(Map<LocalTime, Integer> sleepCountByMinute) {
+        return sleepCountByMinute.entrySet().stream()
+                .max(comparing(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .orElse(LocalTime.of(0, 0));
+    }
+
+    private static int countTotalSleepTimeForGuard(Map<LocalTime, Integer> sleepCountByMinute) {
+        int sleepingTime = 0;
+
+        for (Map.Entry<LocalTime, Integer> localTimeIntegerEntry : sleepCountByMinute.entrySet()) {
+            sleepingTime += localTimeIntegerEntry.getValue();
+        }
+        return sleepingTime;
     }
 
     private static <K, V1, V2> Map<K, V2> mapValues(Map<K, V1> map, Function<V1, V2> valueMapper) {
