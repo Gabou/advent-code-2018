@@ -22,7 +22,10 @@ public class Guards {
 
         Map<Integer, List<String>> recordsByGuard = groupRecordByGuard(records);
 
-        Map<Integer, Map<LocalTime, Integer>> frequencyOfSleepTimeByGuard = mapValues(recordsByGuard, Guards::parseSleepRecordsToSleepFrequency);
+        Map<Integer, Map<LocalTime, Integer>> frequencyOfSleepTimeByGuard = mapValues(recordsByGuard, sleepRecordsForGuard -> {
+            List<SleepPeriod> sleepPeriodForGuard = parseSleepPeriods(sleepRecordsForGuard);
+            return aggregateSleepFrequencies(sleepPeriodForGuard);
+        });
 
         int guardWithBiggestSleepTime = getGuardWithBiggestSleepTime(frequencyOfSleepTimeByGuard);
         LocalTime minuteWhenSleepingMost = getMinuteSleptTheMost(frequencyOfSleepTimeByGuard.get(guardWithBiggestSleepTime));
@@ -94,27 +97,30 @@ public class Guards {
         return Integer.valueOf(record.substring(record.indexOf('#') + 1, record.indexOf(" begins")));
     }
 
-    private static Map<LocalTime, Integer> parseSleepRecordsToSleepFrequency(List<String> sleepRecordsForGuard) {
+    private static Map<LocalTime, Integer> aggregateSleepFrequencies(List<SleepPeriod> sleepPeriodForGuard) {
         Map<LocalTime, Integer> frequencyOfSleepTime = new HashMap<>();
+        for (SleepPeriod sleepPeriod : sleepPeriodForGuard) {
+            for (LocalTime minute = sleepPeriod.asleepTime; minute.isBefore(sleepPeriod.wakeUpTime); minute = minute.plus(1, MINUTES)) {
+                Integer newFrequency = frequencyOfSleepTime.getOrDefault(minute, 0) + 1;
+                frequencyOfSleepTime.put(minute, newFrequency);
+            }
+        }
+        return frequencyOfSleepTime;
+    }
+
+    private static List<SleepPeriod> parseSleepPeriods(List<String> sleepRecordsForGuard) {
         LocalTime asleep = LocalTime.of(0, 0);
 
-        // List<Tuple(asleepTime, wakeTime)> = parse
-        // aggregateToHistogram(sleepPeriods)
-
+        List<SleepPeriod> sleepPeriodForGuard = new ArrayList<>();
         for (String record : sleepRecordsForGuard) {
             if (record.contains("asleep")) {
                 asleep = parseMinuteFromRecord(record);
             } else if (record.contains("wakes")) {
                 LocalTime wakeUp = parseMinuteFromRecord(record);
-
-                for (LocalTime minute = asleep; minute.isBefore(wakeUp); minute = minute.plus(1, MINUTES)) {
-                    Integer newFrequency = frequencyOfSleepTime.getOrDefault(minute, 0) + 1;
-                    frequencyOfSleepTime.put(minute, newFrequency);
-                }
+                sleepPeriodForGuard.add(new SleepPeriod(asleep, wakeUp));
             }
         }
-
-        return frequencyOfSleepTime;
+        return sleepPeriodForGuard;
     }
 
     private static LocalTime parseMinuteFromRecord(String record) {
@@ -137,4 +143,13 @@ public class Guards {
         }
     }
 
+    private static class SleepPeriod {
+        private final LocalTime asleepTime;
+        private final LocalTime wakeUpTime;
+
+        public SleepPeriod(LocalTime asleepTime, LocalTime wakeUpTime) {
+            this.asleepTime = asleepTime;
+            this.wakeUpTime = wakeUpTime;
+        }
+    }
 }
