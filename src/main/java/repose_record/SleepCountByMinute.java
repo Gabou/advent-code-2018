@@ -18,6 +18,7 @@ public class SleepCountByMinute {
     public static SleepCountByMinute aggregateSleepFrequencies(List<SleepPeriod> sleepPeriodForGuard) {
         Map<LocalTime, Integer> sleepCountByMinute = new HashMap<>();
         for (SleepPeriod sleepPeriod : sleepPeriodForGuard) {
+            //todo: please extract iterator of minutes in the SleepPeriod class
             for (LocalTime minute = sleepPeriod.asleepTime; minute.isBefore(sleepPeriod.wakeUpTime); minute = minute.plus(1, MINUTES)) {
                 Integer newFrequency = sleepCountByMinute.getOrDefault(minute, 0) + 1;
                 sleepCountByMinute.put(minute, newFrequency);
@@ -26,14 +27,14 @@ public class SleepCountByMinute {
         return new SleepCountByMinute(sleepCountByMinute);
     }
 
-    int getMaxFrequencyOfSleep() {
+    int getMaxSleepCount() {
         return this.sleepCountByMinute.entrySet().stream()
                 .max(comparing(Map.Entry::getValue))
                 .map(Map.Entry::getValue)
                 .orElse(0);
     }
 
-    int countTotalSleepTimeForGuard() {
+    int totalSleepTime() {
         return this.sleepCountByMinute.values().stream()
                 .mapToInt(value -> value)
                 .sum();

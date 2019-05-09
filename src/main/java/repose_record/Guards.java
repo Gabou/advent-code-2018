@@ -42,14 +42,14 @@ public class Guards {
 
     private static int getGuardIdWithMaxFrequencyOfSleep(Map<Integer, SleepCountByMinute> frequencyOfSleepTimeByGuard) {
         return frequencyOfSleepTimeByGuard.entrySet().stream()
-                .max(comparing(input -> input.getValue().getMaxFrequencyOfSleep()))
+                .max(comparing(input -> input.getValue().getMaxSleepCount()))
                 .map(Map.Entry::getKey)
                 .orElseThrow(RuntimeException::new);
     }
 
     private static int getGuardWithBiggestSleepTime(Map<Integer, SleepCountByMinute> frequencyOfSleepTimeByGuard) {
         return frequencyOfSleepTimeByGuard.keySet().stream()
-                .max(comparing(guardId -> frequencyOfSleepTimeByGuard.get(guardId).countTotalSleepTimeForGuard()))
+                .max(comparing(guardId -> frequencyOfSleepTimeByGuard.get(guardId).totalSleepTime()))
                 .orElse(0);
     }
 
