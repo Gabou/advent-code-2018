@@ -28,7 +28,6 @@ public class Guards {
 
         int guardWithBiggestSleepTime = getGuardWithBiggestSleepTime(frequencyOfSleepTimeByGuard);
         LocalTime minuteWhenSleepingMost = frequencyOfSleepTimeByGuard.get(guardWithBiggestSleepTime).getMinuteSleptTheMost();
-
         int result1 = guardWithBiggestSleepTime * minuteWhenSleepingMost.getMinute();
 
         //Guard sleeping the more frequently at wich minute
